@@ -1,0 +1,65 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: xiaohezi-backend
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false
+  datasource:
+    url: jdbc:h2:mem:xiaohezi;MODE=MySQL;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+  flyway:
+    enabled: true
+  threads:
+    virtual:
+      enabled: true
+logging:
+  level:
+    root: INFO
+    com.xiaohezi: ${APP_LOG_LEVEL:INFO}
+  pattern:
+    console: "%d{HH:mm:ss} %-5level [%X{traceId:-}] %logger{36} - %msg%n"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: never
+
+app:
+  state:
+    cleanup-cron: ${STATE_CLEANUP_CRON:0 0 * * * *}
+  security:
+    mode: ${APP_SECURITY_MODE:demo}
+    username: ${APP_DEMO_USERNAME:demo}
+    password: ${APP_DEMO_PASSWORD:demo123}
+    token: ${APP_DEMO_TOKEN:xhz-demo-token}
+    allowed-origins: ${APP_ALLOWED_ORIGINS:http://localhost:5173,http://127.0.0.1:5173}
+  rocketmq:
+    enabled: ${ROCKETMQ_ENABLED:false}
+
+gemini:
+  enabled: ${GEMINI_ENABLED:true}
+  api-key: ${GEMINI_API_KEY:${API_KEY:}}
+  base-url: ${GEMINI_BASE_URL:https://generativelanguage.googleapis.com/v1beta}
+  model: ${GEMINI_MODEL:gemini-3.5-flash-lite}
+  intent-max-output-tokens: ${GEMINI_INTENT_MAX_OUTPUT_TOKENS:80}
+  answer-max-output-tokens: ${GEMINI_ANSWER_MAX_OUTPUT_TOKENS:200}
+  embedding-model: ${GEMINI_EMBEDDING_MODEL:gemini-embedding-2}
+  embedding-dimensions: ${GEMINI_EMBEDDING_DIMENSIONS:768}
+  connect-timeout-seconds: 10
+  read-timeout-seconds: 45
+  input-usd-per-million-tokens: ${GEMINI_INPUT_USD_PER_MILLION_TOKENS:0.10}
+  output-usd-per-million-tokens: ${GEMINI_OUTPUT_USD_PER_MILLION_TOKENS:0.40}

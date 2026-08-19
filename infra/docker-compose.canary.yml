@@ -1,0 +1,24 @@
+services:
+  app:
+    image: ${APP_IMAGE:?APP_IMAGE must be set}
+    environment:
+      SPRING_PROFILES_ACTIVE: infra
+      MYSQL_URL: jdbc:mysql://mysql:3306/xiaohezi?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+      MYSQL_USER: ${MYSQL_USER:-xiaohezi}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?MYSQL_PASSWORD must be set}
+      REDIS_HOST: redis
+      ROCKETMQ_NAME_SERVER: namesrv:9876
+      APP_SECURITY_MODE: ${APP_SECURITY_MODE:-oidc}
+      APP_DEMO_USERNAME: ${APP_DEMO_USERNAME:-demo}
+      APP_DEMO_PASSWORD: ${APP_DEMO_PASSWORD:?APP_DEMO_PASSWORD must be set}
+      APP_DEMO_TOKEN: ${APP_DEMO_TOKEN:?APP_DEMO_TOKEN must be set}
+      OIDC_ISSUER_URI: ${OIDC_ISSUER_URI:-http://localhost:8180/realms/xiaohezi}
+      OIDC_JWK_SET_URI: ${OIDC_JWK_SET_URI:-http://keycloak:8080/realms/xiaohezi/protocol/openid-connect/certs}
+      GEMINI_ENABLED: ${GEMINI_ENABLED:-false}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+    ports: ["${APP_PORT:-18080}:8080"]
+    networks: [stable]
+networks:
+  stable:
+    external: true
+    name: ${STABLE_NETWORK:-xiaohezi_default}
